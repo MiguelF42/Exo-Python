@@ -10,5 +10,4 @@ def nbr_mots(phrase):
             Dico[i] = 1
     return Dico
 
-print(nbr_mots(x))
-    
+print(nbr_mots(x))  
