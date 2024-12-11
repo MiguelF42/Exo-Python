@@ -1,4 +1,4 @@
-def Fic(Fichier):
+def Fic(Fichier): # Fonction qui prend en paramètre un fichier et retourne une liste des éléments du fichier
     Resultat = [ ]
     fichier=open(Fichier)
     while True :
