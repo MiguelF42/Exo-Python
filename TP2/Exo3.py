@@ -1,4 +1,4 @@
-import os
+import os # Importation de la librairie os
 
 def read_to_buffer(filename):
     with open(filename, 'r') as f:
