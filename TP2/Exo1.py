@@ -1,0 +1,31 @@
+# Resultat = [ ]
+
+# fichier=open("C:/Users/coulm/Desktop/fich.txt")
+# while True :
+#     ligne = fichier.readline()
+#     if ligne == "" :
+#         break
+#     for mot in ligne.split() :
+#         if mot not in Resultat :
+#             Resultat.append(float(mot))
+#         else :
+#             Resultat.append(int(mot))
+# fichier.close()
+# print(Resultat)
+
+def Fic(Fichier):
+    Resultat = [ ]
+    fichier=open(Fichier)
+    while True :
+        ligne = fichier.readline()
+        if ligne == "" :
+            break
+        for mot in ligne.split() :
+            if mot not in Resultat :
+                Resultat.append(float(mot))
+            else :
+                Resultat.append(int(mot))
+    fichier.close()
+    return Resultat
+
+print(Fic("fich.txt"))
