@@ -2,6 +2,7 @@
 #############    By Céline OULMI  ###################
 
 import Password
+import Database
 
 class Salarié(object):  ## qui hérite de object
     """Classe des salariés"""           # Documentation de la classe
@@ -45,18 +46,29 @@ class Salarié(object):  ## qui hérite de object
     
 class User(Salarié):
 ### constructeur de la nouvelle classe User
-    def __init__(self, nom, pnom, login):
+    def __init__(self, nom, pnom, login, pwd=""):
         print ("Création d'un objet User...")
         ##Salarié.__init__(self,nom, pnom)  #### ou bien faire référence par super()
         super().__init__(nom, pnom)
         ##self.Nom = nom
         ##self.Prenom=pnom
         self.Login=login
-        self.Password=self.hashPWD(self.GenPWD())
+        if pwd == "":
+            self.Password = self.GenPWD()
+        else:
+            self.Password = pwd
     ### les get et les set pour les attributs login et pwd
-        
+    def userFromDB( login):
+        user = Database.selectUser(login)
+        self = User(user[4], user[3], user[1], user[2])
+        return self
+
     def Afficher_User(self):
         print("User : ", self.get_nom(),"", self.get_pnom())
+
+    def registerUser(self):
+        Database.insertUser(self.get_nom(), self.get_pnom(), self.Login, self.Password)
+        print("User enregistré")
 
     def GenPWD(self):
         print ("Génération d'un mot de passe")

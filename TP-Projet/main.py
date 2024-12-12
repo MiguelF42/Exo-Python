@@ -8,30 +8,23 @@ print('3 pour quitter')
 
 choix = input('Votre choix : ')
 
-UserList = []
-
 while choix != '3':
     if choix == '1':
         print('Se connecter')
         login = input('Login : ')
         pwd = input('Password : ')
-        logged = False
-        for user in UserList:
-            if user.Login == login:
-                if user.VerifPWD(pwd):
-                    print('Connecté')
-                    Logged = True
-                else:
-                    print('Mot de passe incorrect')
-                break
-        if not Logged:
+        user = Salarié.User.userFromDB(login)
+        if user and user.VerifPWD(pwd):
+            print('Connecté')
+            continue
+        else :
             print('Login incorrect')
     elif choix == '2':
         print('Créer un compte')
         nom = input('Nom : ')
         prenom = input('Prénom : ')
         login = input('Login : ')
-        UserList.append(Salarié.User(nom, prenom, login))
+        Salarié.User(nom, prenom, login).registerUser()
         print('Compte créé')
     else:
         print('Choix invalide')
