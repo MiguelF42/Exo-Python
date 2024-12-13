@@ -9,12 +9,11 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-def insertUser(nom, prenom, nbEtud, specialite, login, password):
-    sql = "INSERT INTO users_etudiant (lname, fname, nb_etudiant, specialite, login, password) VALUES (%s, %s, %s, %s, %s, %s)"
-    val = (nom, prenom, nbEtud, specialite, login, password)
+def insertUser(nom, prenom, nbEtud, specialite, login, password, isAdmin = False):
+    sql = "INSERT INTO users_etudiant (lname, fname, nb_etudiant, specialite, login, password, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    val = (nom, prenom, nbEtud, specialite, login, password, isAdmin)
     mycursor.execute(sql, val)
     mydb.commit()
-    print(mycursor.rowcount, "record inserted.")
 
 def selectUser(login):
     sql = "SELECT * FROM users_etudiant WHERE login = %s"
@@ -29,17 +28,20 @@ def selectAllUsers():
     myresult = mycursor.fetchall()
     return myresult
 
-def updateUser(nom, prenom, nbEtud, specialite, login, password):
-    sql = "UPDATE users_etudiant SET lname = %s, fname = %s, nb_etudiant = %s, specialite = %s, password = %s WHERE login = %s"
-    val = (nom, prenom, nbEtud, specialite, password, login)
+def updateUser(nom, prenom, nbEtud, specialite, login, password, isAdmin, id):
+    sql = "UPDATE users_etudiant SET lname = %s, fname = %s, nb_etudiant = %s, specialite = %s, password = %s, login = %s, is_admin = %s  WHERE id = %s"
+    val = (nom, prenom, nbEtud, specialite, password, login, isAdmin, id)
     mycursor.execute(sql, val)
     mydb.commit()
-    print(mycursor.rowcount, "record(s) affected")
 
 def deleteUser(id):
-    sql = "DELETE FROM users_etudiant WHERE id = %d"
+    sql = "DELETE FROM users_etudiant WHERE id = %s"
     val = [id]
     mycursor.execute(sql, val)
     mydb.commit()
-    print(mycursor.rowcount, "record(s) deleted")
 
+def banUser(id):
+    sql = "UPDATE users_etudiant SET ban_date = NOW() WHERE id = %s"
+    val = [id]
+    mycursor.execute(sql, val)
+    mydb.commit()

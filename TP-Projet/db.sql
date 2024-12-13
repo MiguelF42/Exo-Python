@@ -7,5 +7,6 @@ CREATE TABLE `users_etudiant`(
     `lname` VARCHAR(255) NOT NULL,
     `nb_etudiant` VARCHAR(255) NOT NULL,
     `specialite` VARCHAR(255) NOT NULL,
-    `is_admin` BOOLEAN NOT NULL
+    `is_admin` BOOLEAN NOT NULL,
+    `ban_date` DATETIME
 )
