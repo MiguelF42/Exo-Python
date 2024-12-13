@@ -33,12 +33,15 @@ class Etudiant(object):  ## qui hérite de object
         else:
             self.Nom = nouveau_nom
             print ("Le Nom à été modifié.") 
+        User.updateUser(self)
+
     def set_pnom(self, nouveau_pnom):   # Méthode 'set' pour modifier le nom
         if nouveau_pnom == "":
             print ("Le prénom de l'employé ne peut pas être vide!!!!")
         else:
             self.Prenom = nouveau_pnom
             print ("Le Nom à été modifié.")
+        User.updateUser(self)
 
     def set_nbEtud(self, nouveau_nbEtud):   # Méthode 'set' pour modifier le nom
         if nouveau_nbEtud == "":
@@ -46,6 +49,7 @@ class Etudiant(object):  ## qui hérite de object
         else:
             self.NbEtud = nouveau_nbEtud
             print ("Le nombre d'étudiants à été modifié.")
+        User.updateUser(self)
     
     def set_specialite(self, nouvelle_specialite):   # Méthode 'set' pour modifier le nom
         if nouvelle_specialite == "":
@@ -53,6 +57,8 @@ class Etudiant(object):  ## qui hérite de object
         else:
             self.Specialite = nouvelle_specialite
             print ("La spécialité à été modifiée.")
+        User.updateUser(self)
+
 ### Autres méthode, exemple affichage            
     def afficher(self):
         print (self.Nom, " a été ajouté(e)")
@@ -66,7 +72,7 @@ class Etudiant(object):  ## qui hérite de object
     
 class User(Etudiant):
 ### constructeur de la nouvelle classe User
-    def __init__(self, nom, pnom, nbEtud, specialite, login="", pwd="", isAdmin=False):
+    def __init__(self, nom, pnom, nbEtud, specialite, login="", pwd="", isAdmin=False,id=0):
         print ("Création d'un objet User...")
         ##Salarié.__init__(self,nom, pnom)  #### ou bien faire référence par super()
         super().__init__(nom, pnom, nbEtud, specialite)
@@ -81,6 +87,7 @@ class User(Etudiant):
         else:
             self.Password = pwd
         self.isAdmin = isAdmin
+        self.id = id
 
     def get_login(self):
         return self.Login
@@ -90,22 +97,42 @@ class User(Etudiant):
     
     def set_login(self, login):
         self.Login = login
+        User.updateUser(self)
+
+    def set_pwd(self, pwd):
+        self.Password = self.hashPWD(pwd)
+        User.updateUser(self)
 
     def set_isAdmin(self, admin):
         self.isAdmin = admin
+        User.updateUser(self)
 
     ### les get et les set pour les attributs login et pwd
     def userFromDB(login):
         user = Database.selectUser(login)
-        self = User(user[4], user[3], user[5], user[6], user[1], user[2], user[7])
+        self = User(user[4], user[3], user[5], user[6], user[1], user[2], user[7], user[0])
         return self
 
     def Afficher_User(self):
         print("User : ", self.get_nom(),"", self.get_pnom())
 
-    def registerUser(self):
-        Database.insertUser(self.get_nom(), self.get_pnom(), self.get_nbEtud(), self.get_specialite(), self.Login, self.Password)
+    def afficherUsers():
+        users = Database.selectAllUsers()
+        print("======== Liste des utilisateurs =========")
+        for user in users:
+            print(user)
+        print("=========================================")
+
+    def registerUser(user):
+        Database.insertUser(user.get_nom(), user.get_pnom(), user.get_nbEtud(), user.get_specialite(), user.Login, user.Password)
         print("User enregistré")
+
+    def updateUser(self):
+        Database.updateUser(self.get_nom(), self.get_pnom(), self.get_nbEtud(), self.get_specialite(), self.Login, self.Password)
+        print("User mis à jour")
+
+    def deleteUser(self):
+        Database.deleteUser(self.id)
 
     def GenLogin(self):
         print ("Génération d'un login")
