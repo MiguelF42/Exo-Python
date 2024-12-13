@@ -1,6 +1,6 @@
-import Etudiant
+import Salarié
 
-print('================Console Etudiant===============')
+print('================Console Salarié===============')
 print('')
 print('1 pour se connecter')
 print('2 pour créer un compte')
@@ -13,18 +13,18 @@ while choix != '3':
         print('Se connecter')
         login = input('Login : ')
         pwd = input('Password : ')
-        user = Etudiant.User.userFromDB(login)
+        user = Salarié.User.userFromDB(login)
         if user and user.VerifPWD(pwd):
             print('Connecté')
+            continue
         else :
             print('Login incorrect')
     elif choix == '2':
         print('Créer un compte')
         nom = input('Nom : ')
         prenom = input('Prénom : ')
-        nbEtud = input('Numéro d\'étudiant: ')
-        specialite = input('Spécialité : ')
-        Etudiant.User(nom, prenom, nbEtud, specialite).registerUser()
+        login = input('Login : ')
+        Salarié.User(nom, prenom, login).registerUser()
         print('Compte créé')
     else:
         print('Choix invalide')

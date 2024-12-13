@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`(
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `login` VARCHAR(32) NOT NULL,
+    `password` VARCHAR(1024) NOT NULL,
+    `fname` VARCHAR(255) NOT NULL,
+    `lname` VARCHAR(255) NOT NULL, 
+)
