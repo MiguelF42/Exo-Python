@@ -14,18 +14,13 @@ while choix != '3':
         login = input('Login : ')
         pwd = input('Password : ')
         user = Etudiant.User.userFromDB(login)
-        if user and user.VerifPWD(pwd):
-            print('Connecté')
-        else :
+        if not user or not user.VerifPWD(pwd):
             print('Login incorrect')
-    elif choix == '2':
-        print('Créer un compte')
-        nom = input('Nom : ')
-        prenom = input('Prénom : ')
-        nbEtud = input('Numéro d\'étudiant: ')
-        specialite = input('Spécialité : ')
-        Etudiant.User(nom, prenom, nbEtud, specialite).registerUser()
-        print('Compte créé')
+        else :
+            if user.isAdmin:
+                print('Connecté en tant qu\'admin')
+            else:
+                print('Connecté')
     else:
         print('Choix invalide')
     print('')

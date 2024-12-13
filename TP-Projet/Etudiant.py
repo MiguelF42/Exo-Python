@@ -46,6 +46,13 @@ class Etudiant(object):  ## qui hérite de object
         else:
             self.NbEtud = nouveau_nbEtud
             print ("Le nombre d'étudiants à été modifié.")
+    
+    def set_specialite(self, nouvelle_specialite):   # Méthode 'set' pour modifier le nom
+        if nouvelle_specialite == "":
+            print ("La spécialité de l'étudiant ne peut pas être vide!!!!")
+        else:
+            self.Specialite = nouvelle_specialite
+            print ("La spécialité à été modifiée.")
 ### Autres méthode, exemple affichage            
     def afficher(self):
         print (self.Nom, " a été ajouté(e)")
@@ -59,7 +66,7 @@ class Etudiant(object):  ## qui hérite de object
     
 class User(Etudiant):
 ### constructeur de la nouvelle classe User
-    def __init__(self, nom, pnom, nbEtud, specialite, login="", pwd=""):
+    def __init__(self, nom, pnom, nbEtud, specialite, login="", pwd="", isAdmin=False):
         print ("Création d'un objet User...")
         ##Salarié.__init__(self,nom, pnom)  #### ou bien faire référence par super()
         super().__init__(nom, pnom, nbEtud, specialite)
@@ -73,10 +80,24 @@ class User(Etudiant):
             self.Password = self.hashPWD(self.GenPWD())
         else:
             self.Password = pwd
+        self.isAdmin = isAdmin
+
+    def get_login(self):
+        return self.Login
+    
+    def get_isAdmin(self):
+        return self.isAdmin
+    
+    def set_login(self, login):
+        self.Login = login
+
+    def set_isAdmin(self, admin):
+        self.isAdmin = admin
+
     ### les get et les set pour les attributs login et pwd
     def userFromDB(login):
         user = Database.selectUser(login)
-        self = User(user[4], user[3], user[5], user[6], user[1], user[2])
+        self = User(user[4], user[3], user[5], user[6], user[1], user[2], user[7])
         return self
 
     def Afficher_User(self):
@@ -98,14 +119,20 @@ class User(Etudiant):
         print ("Mot de passe = ", pwd)
         return pwd
 
-    def hashPWD(self, pwd):
+    def hashPWD(self, pwd, algo="sha256"):
         print ("Hashage du mot de passe")
-        hashpwd = Password.hash_password(pwd)
-        return hashpwd
+        if algo == "sha256":
+            return Password.hash_password_sha256(pwd)
+        else:
+            return Password.hash_password(pwd)
     
     def VerifPWD(self, pwd):
         print ("Vérification du mot de passe")
-        return Password.check_password(pwd, self.Password)
+        if pwd.startswith("$2b$"):
+            return Password.check_password(pwd, self.Password)
+        else:
+            return Password.check_password_sha256(pwd, self.Password)
+        
 
 ## Fin classes donc de nouveaux types
         
